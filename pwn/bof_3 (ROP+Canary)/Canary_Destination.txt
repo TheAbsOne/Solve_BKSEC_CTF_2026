@@ -1,0 +1,17 @@
+Địa chỉ CAO (Đáy Stack)
+      |
+      +-----------------------------+
+      |      Return Address         |  <-- Saved RIP (Đích đến của ROP)
+      +-----------------------------+
+      |       Saved RBP             |  <-- 8 bytes (Thường ghi đè rác)
+      +-----------------------------+
+      |       STACK CANARY          |  <-- 8 bytes (Mục tiêu phải leak)
+      +-----------------------------+
+      |      Local Variables        |  <-- Padding / Biến cục bộ
+      |            ...              |
+      +-----------------------------+
+      |      Buffer [Dữ liệu]       |  <-- Điểm bắt đầu nhập (Địa chỉ thấp)
+      |  (A A A A A A A A A A A A)  |
+      +-----------------------------+
+      |
+Địa chỉ THẤP (Đỉnh Stack)
