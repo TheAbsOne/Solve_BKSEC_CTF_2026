@@ -1,0 +1,61 @@
+================================================================================
+CHỦ ĐỀ: PIE (POSITION INDEPENDENT EXECUTABLE) - CƠ CHẾ VÀ NHẬN DIỆN
+================================================================================
+
+1. BẢN CHẤT CỦA OFFSET (KHOẢNG CÁCH TƯƠNG ĐỐI)
+--------------------------------------------------------------------------------
+   * OFFSET KHÔNG CỐ ĐỊNH: Offset của hàm main() hay win() là khoảng cách từ
+     đầu file đến hàm đó. Nó phụ thuộc hoàn toàn vào kích thước code và cách
+     biên dịch.
+     
+   * CÔNG THỨC:  Actual_Addr = PIE_Base + Offset_Trong_File
+     
+     [!] Lưu ý: Offset_Trong_File phải lấy từ IDA/GDB/objdump của chính file đó.
+         Không được copy từ bài mẫu hay file khác.
+
+2. SƠ ĐỒ BỘ NHỚ KHI CÓ PIE (THE MEMORY MAP)
+--------------------------------------------------------------------------------
+[ VÙNG NHỚ RAM (ẢO) ]
+      |
+      | (Vùng địa chỉ thấp - chưa được map)
+      v
++-----------------------------+ <--- [ PIE BASE ] (ĐỊA CHỈ GỐC)
+| HEADER (.ELF)               |      Là địa chỉ bắt đầu nạp file vào RAM.
+| (Luôn ở Offset 0x000)       |      Ví dụ: 0x555555554000
++-----------------------------+
+| CODE SECTION (.text)        |
+|                             |
+|   + Offset main: [????]     | <--- Thay đổi tùy file (vd: 0x1135, 0x1040...)
+|   + Offset win:  [????]     | <--- Thay đổi tùy file (vd: 0x1229...)
+|                             |
++-----------------------------+
+| DATA SECTION (.data)        |
+|   + Biến toàn cục...        |
++-----------------------------+
+      |
+      v
+[ VÙNG NHỚ CAO ]
+
+3. DẤU HIỆU NHẬN BIẾT "PIE BASE" (HOW TO IDENTIFY PIE BASE)
+--------------------------------------------------------------------------------
+Làm sao biết con số bạn leak được (hoặc thấy trong GDB) chính là PIE Base?
+
+   A. KẾT THÚC BẰNG "000" (Page Alignment)
+      - Bộ nhớ máy tính quản lý theo trang (Page), thường là 4KB (0x1000).
+      - Do đó, địa chỉ bắt đầu của một file (Base) LUÔN chia hết cho 0x1000.
+      - Ví dụ: 0x555555554000 (ĐÚNG), 0x555555554120 (SAI - đây là địa chỉ lệnh).
+
+   B. DẢI ĐỊA CHỈ ĐẶC TRƯNG (Linux x64)
+      - Nếu PIE bật, Kernel thường map chương trình vào dải 0x55... hoặc 0x56...
+      - Ví dụ: 0x55xx... là Binary chính.
+               0x7fxx... thường là Thư viện (Libc/Ld).
+               0x7ffx... thường là Stack.
+
+   C. KIỂM TRA HEADER (Magic Bytes)
+      - Tại đúng địa chỉ PIE Base, 4 byte đầu tiên LUÔN LÀ: \x7fELF
+      - Trong GDB gõ: x/s [Địa_chỉ_nghi_ngờ] -> Nếu thấy "ELF" là chuẩn.
+
+   D. CHECK BẰNG CÔNG CỤ (GDB vmmap)
+      - Trong GDB, gõ lệnh `vmmap`. Dòng đầu tiên có quyền r-xp (Read-Execute)
+        và đường dẫn đến file của bạn chính là PIE Base.
+================================================================================
