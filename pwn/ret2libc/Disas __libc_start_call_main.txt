@@ -1,0 +1,44 @@
+gef➤  disas __libc_start_call_main
+Dump of assembler code for function __libc_start_call_main:
+   0x000055555557dd10 <+0>:     push   rax
+   0x000055555557dd11 <+1>:     pop    rax
+   0x000055555557dd12 <+2>:     sub    rsp,0x98
+   0x000055555557dd19 <+9>:     mov    QWORD PTR [rsp+0x8],rdi
+   0x000055555557dd1e <+14>:    lea    rdi,[rsp+0x20]
+   0x000055555557dd23 <+19>:    mov    DWORD PTR [rsp+0x14],esi
+   0x000055555557dd27 <+23>:    mov    QWORD PTR [rsp+0x18],rdx
+   0x000055555557dd2c <+28>:    mov    rax,QWORD PTR fs:0x28
+   0x000055555557dd35 <+37>:    mov    QWORD PTR [rsp+0x88],rax
+   0x000055555557dd3d <+45>:    xor    eax,eax
+   0x000055555557dd3f <+47>:    call   0x5555555961e0 <_setjmp>
+   0x000055555557dd44 <+52>:    endbr64
+   0x000055555557dd48 <+56>:    test   eax,eax
+   0x000055555557dd4a <+58>:    jne    0x55555557dd97 <__libc_start_call_main+135>
+   0x000055555557dd4c <+60>:    mov    rax,QWORD PTR fs:0x300
+   0x000055555557dd55 <+69>:    mov    QWORD PTR [rsp+0x68],rax
+   0x000055555557dd5a <+74>:    mov    rax,QWORD PTR fs:0x2f8
+   0x000055555557dd63 <+83>:    mov    QWORD PTR [rsp+0x70],rax
+   0x000055555557dd68 <+88>:    lea    rax,[rsp+0x20]
+   0x000055555557dd6d <+93>:    mov    QWORD PTR fs:0x300,rax
+   0x000055555557dd76 <+102>:   mov    rax,QWORD PTR [rip+0x1f023b]        # 0x55555576dfb8
+   0x000055555557dd7d <+109>:   mov    edi,DWORD PTR [rsp+0x14]
+   0x000055555557dd81 <+113>:   mov    rsi,QWORD PTR [rsp+0x18]
+   0x000055555557dd86 <+118>:   mov    rdx,QWORD PTR [rax]
+   0x000055555557dd89 <+121>:   mov    rax,QWORD PTR [rsp+0x8]
+   0x000055555557dd8e <+126>:   call   rax
+   0x000055555557dd90 <+128>:   mov    edi,eax
+   0x000055555557dd92 <+130>:   call   0x5555555995f0 <__GI_exit>
+   0x000055555557dd97 <+135>:   call   0x5555555e55f0 <__GI___nptl_deallocate_tsd>
+   0x000055555557dd9c <+140>:   lock dec DWORD PTR [rip+0x1f0505]        # 0x55555576e2a8 <__nptl_nthreads>
+   0x000055555557dda3 <+147>:   sete   al
+   0x000055555557dda6 <+150>:   test   al,al
+   0x000055555557dda8 <+152>:   jne    0x55555557ddb8 <__libc_start_call_main+168>
+   0x000055555557ddaa <+154>:   mov    edx,0x3c
+   0x000055555557ddaf <+159>:   nop
+   0x000055555557ddb0 <+160>:   xor    edi,edi
+   0x000055555557ddb2 <+162>:   mov    eax,edx
+   0x000055555557ddb4 <+164>:   syscall
+   0x000055555557ddb6 <+166>:   jmp    0x55555557ddb0 <__libc_start_call_main+160>
+   0x000055555557ddb8 <+168>:   xor    edi,edi
+   0x000055555557ddba <+170>:   jmp    0x55555557dd92 <__libc_start_call_main+130>
+End of assembler dump.
